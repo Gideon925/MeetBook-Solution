@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Find Providers | MeetBook Solutions</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            color: #172b4d;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,.05);
+        }
+
+        .logo {
+            color: #123b70;
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #123b70;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #10233f, #2463eb);
+            color: white;
+            padding: 65px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            color: #e1eaff;
+            line-height: 1.7;
+        }
+
+        .search-container {
+            max-width: 850px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+        }
+
+        .search-box {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.08);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 180px;
+            padding: 15px;
+            border: 1px solid #dce3ed;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .search-box button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #2463eb;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: #1749b8;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 0 20px 50px;
+        }
+
+        .section-heading {
+            margin-bottom: 25px;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 8px;
+            color: #10233f;
+        }
+
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 22px;
+        }
+
+        .provider-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.05);
+        }
+
+        .provider-card h3 {
+            color: #123b70;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .category {
+            display: inline-block;
+            background: #eaf1ff;
+            color: #2463eb;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .location {
+            color: #526174;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .experience {
+            color: #526174;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            color: #168044;
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 15px;
+            border-radius: 7px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .store-button {
+            background: #2463eb;
+            color: white;
+        }
+
+        .book-button {
+            background: #eaf1ff;
+            color: #123b70;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 45px 20px;
+            border-radius: 14px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        footer {
+            background: #10233f;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        @media(max-width: 600px) {
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box input,
+            .search-box button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">MeetBook Solutions</a>
+
+    <a href="/" class="nav-link">Home</a>
+</header>
+
+<section class="hero">
+    <h1>Find the Right Provider</h1>
+
+    <p>
+        Discover trusted businesses and service providers.
+        Explore their products, services and prices before booking.
+    </p>
+</section>
+
+<div class="search-container">
+    <form method="GET"
+          action="{{ url_for('providers.search_providers') }}"
+          class="search-box">
+
+        <input
+            type="text"
+            name="service"
+            placeholder="What service or business are you looking for?"
+            value="{{ request.args.get('service', '') }}"
+        >
+
+        <input
+            type="text"
+            name="location"
+            placeholder="Enter city, state or neighbourhood"
+            value="{{ request.args.get('location', '') }}"
+        >
+
+        <button type="submit">Search Providers</button>
+
+    </form>
+</div>
+
+<main class="container">
+
+    <div class="section-heading">
+        <h2>Available Providers</h2>
+        <p>Explore providers and see what they offer.</p>
+    </div>
+
+    {% if providers %}
+
+        <div class="provider-grid">
+
+            {% for provider in providers %}
+
+                <article class="provider-card">
+
+                    <span class="category">
+                        {{ provider.service_category }}
+                    </span>
+
+                    <h3>{{ provider.business_name }}</h3>
+
+                    <p class="description">
+                        {{ provider.description or
+                           "This provider has not added a business description yet." }}
+                    </p>
+
+                    <p class="location">
+                        {{ provider.neighbourhood or "" }}
+                        {% if provider.neighbourhood %}, {% endif %}
+                        {{ provider.city }}, {{ provider.state }}
+                    </p>
+
+                    <p class="experience">
+                        Experience:
+                        {{ provider.years_of_experience or 0 }} years
+                    </p>
+
+                    {% if provider.starting_price %}
+                        <p class="price">
+                            Starting from ₦{{ "{:,.2f}".format(provider.starting_price|float) }}
+                        </p>
+                    {% endif %}
+
+                    <div class="actions">
+
+                        <a
+                            class="button store-button"
+                            href="{{ url_for(
+                                'providers.provider_storefront',
+                                profile_id=provider.id
+                            ) }}"
+                        >
+                            View Products & Services
+                        </a>
+
+                        <a
+                            class="button book-button"
+                            href="{{ url_for(
+                                'bookings.create_booking',
+                                profile_id=provider.id
+                            ) }}"
+                        >
+                            Book Provider
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <h2>No providers found</h2>
+
+            <p>
+                We could not find any providers matching your search.
+                Try another service or location.
+            </p>
+        </div>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    MeetBook Solutions — Find. Book. Get It Done.
+</footer>
+
+</body>
+</html>

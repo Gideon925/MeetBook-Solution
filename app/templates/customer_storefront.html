@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ profile.business_name }} | MeetBook Solutions</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            color: #172b4d;
+        }
+
+        header {
+            background: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,.05);
+        }
+
+        header a {
+            text-decoration: none;
+            color: #123b70;
+            font-weight: bold;
+        }
+
+        .logo {
+            font-size: 21px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .business-header {
+            background: linear-gradient(135deg, #10233f, #2463eb);
+            color: white;
+            padding: 40px;
+            border-radius: 18px;
+            margin-bottom: 35px;
+        }
+
+        .business-header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .business-header p {
+            line-height: 1.7;
+            margin-bottom: 12px;
+            color: #e1eaff;
+        }
+
+        .location {
+            font-size: 14px;
+            color: #dce8ff;
+        }
+
+        .section-heading {
+            margin-bottom: 25px;
+        }
+
+        .section-heading h2 {
+            color: #10233f;
+            margin-bottom: 8px;
+        }
+
+        .listings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .listing-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category {
+            color: #2463eb;
+            background: #eaf1ff;
+            display: inline-block;
+            width: fit-content;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .listing-card h3 {
+            color: #123b70;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            color: #168044;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: auto;
+        }
+
+        .unit {
+            color: #64748b;
+            font-size: 13px;
+            margin: 5px 0 18px;
+        }
+
+        .book-button {
+            display: block;
+            background: #2463eb;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .book-button:hover {
+            background: #1749b8;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 45px 20px;
+            border-radius: 14px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 45px;
+            background: #10233f;
+            color: white;
+        }
+
+        @media(max-width: 600px) {
+            .business-header {
+                padding: 27px;
+            }
+
+            .business-header h1 {
+                font-size: 26px;
+            }
+
+            header {
+                padding: 18px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="/" class="logo">MeetBook Solutions</a>
+
+    <a href="{{ url_for('providers.search_providers') }}">
+        Find Providers
+    </a>
+</header>
+
+<main class="container">
+
+    <section class="business-header">
+
+        <h1>{{ profile.business_name }}</h1>
+
+        <p>{{ profile.description }}</p>
+
+        <p>{{ profile.service_category }}</p>
+
+        <div class="location">
+            {{ profile.neighbourhood or "" }}
+            {% if profile.neighbourhood %}, {% endif %}
+            {{ profile.city }}, {{ profile.state }}
+        </div>
+
+    </section>
+
+    <section>
+
+        <div class="section-heading">
+            <h2>Products and Services</h2>
+
+            <p>
+                Choose what you need and see the provider's listed price.
+            </p>
+        </div>
+
+        {% if listings %}
+
+            <div class="listings">
+
+                {% for listing in listings %}
+
+                    <article class="listing-card">
+
+                        <span class="category">
+                            {{ listing.catalogue_item.division }}
+                            ·
+                            {{ listing.catalogue_item.category }}
+                        </span>
+
+                        <h3>
+                            {{ listing.catalogue_item.name }}
+                        </h3>
+
+                        <p class="description">
+                            {{ listing.description or
+                               "Contact this provider for more information." }}
+                        </p>
+
+                        <div class="price">
+                            ₦{{ "{:,.2f}".format(listing.price|float) }}
+                        </div>
+
+                        <div class="unit">
+                            {% if listing.unit %}
+                                Per {{ listing.unit }}
+                            {% else %}
+                                Provider's listed price
+                            {% endif %}
+                        </div>
+
+                        <a
+                            class="book-button"
+                            href="{{ url_for(
+                                'bookings.create_booking',
+                                profile_id=profile.id,
+                                listing_id=listing.id
+                            ) }}"
+                        >
+                            Select and Book
+                        </a>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+                <h2>No available products or services</h2>
+
+                <p>
+                    This provider has not added any available listings yet.
+                </p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+<footer>
+    MeetBook Solutions · Find. Book. Get It Done.
+</footer>
+
+</body>
+</html>

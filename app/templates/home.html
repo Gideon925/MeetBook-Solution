@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MeetBook Solutions | Find. Book. Get It Done.</title>
+
+    <meta name="description"
+          content="Find and book home services, food, transportation and professional services with MeetBook Solutions.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">
+        Meet<span>Book</span><small>.</small>
+        <span class="logo-subtitle">SOLUTIONS</span>
+    </a>
+
+    <nav class="main-nav">
+        <a href="#services">Explore Services</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#providers">For Providers</a>
+
+        <!-- MEETBOOK AI NAVIGATION -->
+        <a href="{{ url_for('ai.chat') }}" class="ai-nav-link">
+            MeetBook AI
+        </a>
+    </nav>
+
+    <div class="nav-buttons">
+        <a href="{{ url_for('auth.login') }}" class="login-btn">
+            Log in
+        </a>
+
+        <a href="{{ url_for('auth.register') }}" class="signup-btn">
+            Get Started <span>→</span>
+        </a>
+    </div>
+</header>
+
+
+<main>
+
+    <!-- HERO SECTION -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <span class="status-dot"></span>
+                YOUR EVERYDAY SERVICES, CONNECTED
+            </div>
+
+            <h1>
+                Everything you need.
+                <span>One place to find it.</span>
+            </h1>
+
+            <p class="hero-description">
+                From home repairs and delicious meals to transportation
+                and professional services, MeetBook helps you discover
+                and connect with providers who serve your location.
+            </p>
+
+            <form class="search-box"
+                  method="GET"
+                  action="{{ url_for('providers.search_providers') }}">
+
+                <div class="search-field">
+                    <label for="service">WHAT DO YOU NEED?</label>
+
+                    <input
+                        type="text"
+                        id="service"
+                        name="service"
+                        placeholder="Try electrician, food, cleaning..."
+                    >
+                </div>
+
+                <div class="search-divider"></div>
+
+                <div class="search-field">
+                    <label for="location">WHERE DO YOU NEED IT?</label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="City, state or neighbourhood"
+                    >
+                </div>
+
+                <button type="submit" class="search-button">
+                    Search <span>→</span>
+                </button>
+
+            </form>
+
+            <div class="hero-bottom">
+                <span>Discover services.</span>
+                <span>Compare providers.</span>
+                <span>Book with confidence.</span>
+            </div>
+
+        </div>
+
+
+        <!-- HERO DESIGN PANEL -->
+
+        <div class="hero-visual">
+
+            <div class="visual-orbit orbit-one"></div>
+            <div class="visual-orbit orbit-two"></div>
+
+            <div class="visual-heading">
+                <span>THE MEETBOOK EXPERIENCE</span>
+                <h3>Your world of services, simplified.</h3>
+            </div>
+
+            <div class="floating-card card-main">
+                <div class="card-top">
+                    <div class="card-logo">MB</div>
+                    <span class="card-label">MEETBOOK MARKETPLACE</span>
+                </div>
+
+                <h3>What can we help you find today?</h3>
+
+                <div class="mini-service-list">
+                    <div class="mini-service">
+                        <span class="mini-icon">01</span>
+                        <div>
+                            <strong>Home Services</strong>
+                            <small>Repairs and maintenance</small>
+                        </div>
+                        <span class="mini-arrow">→</span>
+                    </div>
+
+                    <div class="mini-service">
+                        <span class="mini-icon">02</span>
+                        <div>
+                            <strong>Food & Catering</strong>
+                            <small>Meals and food vendors</small>
+                        </div>
+                        <span class="mini-arrow">→</span>
+                    </div>
+
+                    <div class="mini-service">
+                        <span class="mini-icon">03</span>
+                        <div>
+                            <strong>Transportation</strong>
+                            <small>Drivers and journeys</small>
+                        </div>
+                        <span class="mini-arrow">→</span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <span class="footer-dot"></span>
+                    FIND. BOOK. GET IT DONE.
+                </div>
+            </div>
+
+            <div class="floating-note note-top">
+                <span class="note-number">01</span>
+                <div>
+                    <strong>Find what you need</strong>
+                    <small>Explore available services</small>
+                </div>
+            </div>
+
+            <div class="floating-note note-bottom">
+                <span class="note-number gold">02</span>
+                <div>
+                    <strong>Book with confidence</strong>
+                    <small>Connect with service providers</small>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PLATFORM BENEFITS -->
+
+    <section class="benefit-strip">
+
+        <div class="benefit-item">
+            <span class="benefit-number">01</span>
+            <div>
+                <strong>Multiple service divisions</strong>
+                <p>Different needs, one platform.</p>
+            </div>
+        </div>
+
+        <div class="benefit-item">
+            <span class="benefit-number">02</span>
+            <div>
+                <strong>Location-based discovery</strong>
+                <p>Find providers serving your area.</p>
+            </div>
+        </div>
+
+        <div class="benefit-item">
+            <span class="benefit-number">03</span>
+            <div>
+                <strong>Simple booking experience</strong>
+                <p>Discover, connect and book.</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- SERVICES -->
+
+    <section class="section services-section" id="services">
+
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">EXPLORE OUR MARKETPLACE</span>
+
+                <h2>
+                    One platform.<br>
+                    <span>Many possibilities.</span>
+                </h2>
+
+                <p>
+                    Whatever you need, start by exploring the right
+                    MeetBook service division.
+                </p>
+            </div>
+
+            <a href="{{ url_for('auth.register') }}"
+               class="text-link">
+                Join MeetBook <span>→</span>
+            </a>
+        </div>
+
+
+        <div class="service-grid">
+
+            <a href="{{ url_for('providers.search_providers', service='Home') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">01</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Home</h3>
+                <p>
+                    Electricians, plumbers, cleaners, generator technicians
+                    and home repairs.
+                </p>
+                <span class="service-link">Explore Home Services →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Food') }}"
+               class="service-card featured-card">
+                <div class="service-card-top">
+                    <span class="service-icon">02</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Food</h3>
+                <p>
+                    Restaurants, private cooks, caterers, food vendors
+                    and small chops.
+                </p>
+                <span class="service-link">Explore Food Services →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Business') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">03</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Business</h3>
+                <p>
+                    Salons, photographers, hotels, event centres
+                    and professional appointments.
+                </p>
+                <span class="service-link">Explore Businesses →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Health') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">04</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Health</h3>
+                <p>
+                    Qualified healthcare professionals, clinic
+                    appointments and home visits.
+                </p>
+                <span class="service-link">Explore Health Services →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Mobility') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">05</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Mobility</h3>
+                <p>
+                    Personal drivers, scheduled transportation
+                    and point-to-point journeys.
+                </p>
+                <span class="service-link">Explore Mobility →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Roadside') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">06</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Roadside</h3>
+                <p>
+                    Towing, vehicle recovery and roadside
+                    assistance.
+                </p>
+                <span class="service-link">Explore Roadside →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Moving') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">07</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Moving</h3>
+                <p>
+                    Relocation, loading, unloading and furniture
+                    transportation.
+                </p>
+                <span class="service-link">Explore Moving →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Pet Care') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">08</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Pet Care</h3>
+                <p>
+                    Pet grooming, veterinary visits, pet sitting
+                    and boarding.
+                </p>
+                <span class="service-link">Explore Pet Care →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Connect') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">09</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Connect</h3>
+                <p>
+                    Social connections, conversations and
+                    entertainment.
+                </p>
+                <span class="service-link">Explore Connect →</span>
+            </a>
+
+
+            <a href="{{ url_for('providers.search_providers', service='Other Services') }}"
+               class="service-card">
+                <div class="service-card-top">
+                    <span class="service-icon">10</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+                <h3>MeetBook Other Services</h3>
+                <p>
+                    Discover additional services offered by
+                    registered providers.
+                </p>
+                <span class="service-link">Explore Other Services →</span>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- HOW IT WORKS -->
+
+    <section class="how-section" id="how-it-works">
+
+        <div class="section-heading centered">
+            <span class="eyebrow">A SIMPLE WAY TO GET THINGS DONE</span>
+
+            <h2>How MeetBook works</h2>
+
+            <p>
+                We make discovering and booking services
+                straightforward.
+            </p>
+        </div>
+
+
+        <div class="steps">
+
+            <div class="step">
+                <span class="step-number">01</span>
+                <div class="step-line"></div>
+                <h3>Create an account</h3>
+                <p>
+                    Register as a customer and provide your
+                    basic information.
+                </p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">02</span>
+                <div class="step-line"></div>
+                <h3>Explore services</h3>
+                <p>
+                    Search for services and providers
+                    in your preferred location.
+                </p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">03</span>
+                <div class="step-line"></div>
+                <h3>Make a booking</h3>
+                <p>
+                    Select a provider and submit your
+                    booking request.
+                </p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">04</span>
+                <div class="step-line"></div>
+                <h3>Complete your service</h3>
+                <p>
+                    Confirm the agreed service has
+                    been completed.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROVIDER SECTION -->
+
+    <section class="provider-section" id="providers">
+
+        <div class="provider-content">
+            <span class="eyebrow">FOR SERVICE PROVIDERS AND BUSINESSES</span>
+
+            <h2>
+                Bring your business<br>
+                <span>closer to customers.</span>
+            </h2>
+
+            <p>
+                Create your professional profile, showcase your
+                services, list your prices and connect with customers
+                searching for what you offer.
+            </p>
+
+            <a href="{{ url_for('auth.register') }}"
+               class="provider-button">
+                Become a Provider <span>→</span>
+            </a>
+        </div>
+
+        <div class="provider-side">
+            <div class="provider-stat">
+                <span>YOUR BUSINESS</span>
+                <strong>Deserves to be discovered.</strong>
+                <p>
+                    Present your services in one organised
+                    marketplace.
+                </p>
+            </div>
+
+            <div class="provider-decoration">
+                MEETBOOK<br>
+                <span>PARTNER NETWORK</span>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- FINAL CALL TO ACTION -->
+
+    <section class="final-cta">
+
+        <span class="eyebrow">START YOUR MEETBOOK EXPERIENCE</span>
+
+        <h2>
+            Your next service<br>
+            starts with MeetBook.
+        </h2>
+
+        <p>
+            Create an account and discover a more convenient
+            way to connect with service providers.
+        </p>
+
+        <div class="cta-buttons">
+            <a href="{{ url_for('auth.register') }}" class="signup-btn">
+                Create an Account →
+            </a>
+
+            <a href="{{ url_for('auth.login') }}" class="cta-login">
+                I already have an account
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <div class="footer-main">
+
+        <div class="footer-brand">
+            <a href="/" class="logo footer-logo">
+                Meet<span>Book</span><small>.</small>
+            </a>
+
+            <p>
+                Connecting people with services.
+                Making everyday tasks easier.
+            </p>
+        </div>
+
+        <div class="footer-column">
+            <h4>Marketplace</h4>
+            <a href="#services">Explore Services</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#providers">Become a Provider</a>
+            <a href="{{ url_for('ai.chat') }}">MeetBook AI</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>Your Account</h4>
+            <a href="{{ url_for('auth.register') }}">Create Account</a>
+            <a href="{{ url_for('auth.login') }}">Log In</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>MeetBook Solutions</h4>
+            <span>Find. Book. Get It Done.</span>
+            <span>Built for Nigeria.</span>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>© 2026 MeetBook Solutions. All rights reserved.</span>
+        <span>Find. Book. Get It Done.</span>
+    </div>
+
+</footer>
+
+</body>
+</html>
+

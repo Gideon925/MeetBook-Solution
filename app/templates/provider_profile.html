@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Provider Profile | MeetBook</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            color: #173b67;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background: #173b67;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #24558e;
+        }
+
+        .note {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Create Your Provider Profile</h1>
+
+    <p>
+        Tell customers about your business and the services
+        you provide through MeetBook.
+    </p>
+
+    <form method="POST">
+
+        <input type="hidden" name="csrf_token"
+               value="{{ csrf_token() }}">
+
+        <label>Business or Service Name *</label>
+        <input type="text" name="business_name" required>
+
+        <label>Service Category *</label>
+        <select name="service_category" required>
+            <option value="">Select a category</option>
+            <option value="Home Services">Home Services</option>
+            <option value="Food">Food and Catering</option>
+            <option value="Business">Business Services</option>
+            <option value="Health">Health Services</option>
+            <option value="Mobility">Mobility and Transport</option>
+            <option value="Roadside">Roadside Assistance</option>
+            <option value="Moving">Moving Services</option>
+            <option value="Pet Care">Pet Care</option>
+            <option value="Other">Other Services</option>
+        </select>
+
+        <label>Describe Your Services *</label>
+        <textarea name="description"
+                  placeholder="Explain the services you offer..."
+                  required></textarea>
+
+        <h2>Business Location</h2>
+
+        <label>State *</label>
+        <input type="text" name="state"
+               placeholder="e.g. Cross River State" required>
+
+        <label>City *</label>
+        <input type="text" name="city"
+               placeholder="e.g. Calabar" required>
+
+        <label>Local Government Area *</label>
+        <input type="text" name="lga"
+               placeholder="e.g. Calabar Municipal" required>
+
+        <label>Neighbourhood</label>
+        <input type="text" name="neighbourhood"
+               placeholder="e.g. Marian Road">
+
+        <label>Business Address</label>
+        <input type="text" name="business_address"
+               placeholder="Enter your business address">
+
+        <h2>Experience and Pricing</h2>
+
+        <label>Years of Experience</label>
+        <input type="number" name="years_of_experience"
+               min="0" value="0">
+
+        <label>Starting Price (₦)</label>
+        <input type="number" name="starting_price"
+               min="0" step="0.01"
+               placeholder="e.g. 5000">
+
+        <p class="note">
+            Your starting price is an indication. Final service
+            pricing can be agreed with customers before booking.
+        </p>
+
+        <button type="submit">Create Provider Profile</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

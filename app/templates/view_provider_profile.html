@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Provider Profile | MeetBook</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+        }
+
+        h1, h2 {
+            color: #173b67;
+        }
+
+        .detail {
+            padding: 13px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .price {
+            color: #168044;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: #173b67;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h1>{{ profile.business_name }}</h1>
+        <p>{{ profile.service_category }}</p>
+        <p>{{ profile.description }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Business Information</h2>
+
+        <div class="detail">
+            <span class="label">State:</span>
+            {{ profile.state }}
+        </div>
+
+        <div class="detail">
+            <span class="label">City:</span>
+            {{ profile.city }}
+        </div>
+
+        <div class="detail">
+            <span class="label">LGA:</span>
+            {{ profile.lga }}
+        </div>
+
+        <div class="detail">
+            <span class="label">Neighbourhood:</span>
+            {{ profile.neighbourhood or "Not provided" }}
+        </div>
+
+        <div class="detail">
+            <span class="label">Address:</span>
+            {{ profile.business_address or "Not provided" }}
+        </div>
+
+        <div class="detail">
+            <span class="label">Experience:</span>
+            {{ profile.years_of_experience }} years
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Starting Price</h2>
+
+        <p class="price">
+            {% if profile.starting_price is not none %}
+                ₦{{ "{:,.2f}".format(profile.starting_price) }}
+            {% else %}
+                Price available on request
+            {% endif %}
+        </p>
+    </div>
+
+    <a href="{{ url_for('auth.provider_dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Provider Dashboard | MeetBook Solutions</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            color: #26354a;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .navbar {
+            background: white;
+            padding: 19px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e8edf5;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #10233f;
+        }
+
+        .logo span {
+            color: #2463eb;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 23px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #526176;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links .logout {
+            background: #10233f;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 40px auto;
+            padding: 0 22px;
+        }
+
+        .welcome {
+            background: linear-gradient(120deg, #10233f, #2463eb);
+            color: white;
+            padding: 38px;
+            border-radius: 17px;
+            margin-bottom: 30px;
+        }
+
+        .welcome small {
+            color: #c9d8ff;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .welcome h1 {
+            font-size: 32px;
+            margin: 13px 0;
+        }
+
+        .welcome p {
+            color: #dbe5ff;
+            line-height: 1.7;
+        }
+
+        .section-title {
+            margin: 34px 0 17px;
+            color: #10233f;
+            font-size: 21px;
+        }
+
+        .status-card,
+        .info-card,
+        .stat-card,
+        .action-card {
+            background: white;
+            border: 1px solid #e8edf5;
+            border-radius: 13px;
+            padding: 23px;
+        }
+
+        .status-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status-card h3 {
+            color: #10233f;
+            margin-bottom: 8px;
+        }
+
+        .status-card p {
+            color: #68778b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .status {
+            padding: 9px 17px;
+            border-radius: 30px;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status.approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 17px;
+        }
+
+        .stat-card span {
+            display: block;
+            color: #7b8798;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 13px;
+        }
+
+        .stat-card strong {
+            font-size: 30px;
+            color: #10233f;
+        }
+
+        .information-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 17px;
+        }
+
+        .info-card span {
+            display: block;
+            color: #8793a5;
+            font-size: 12px;
+            margin-bottom: 9px;
+        }
+
+        .info-card strong {
+            color: #10233f;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-summary {
+            background: white;
+            padding: 24px;
+            border: 1px solid #e8edf5;
+            border-radius: 13px;
+            line-height: 1.8;
+        }
+
+        .profile-summary h3 {
+            color: #10233f;
+            margin-bottom: 10px;
+        }
+
+        .profile-summary p {
+            color: #68778b;
+            font-size: 14px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .action-card {
+            display: block;
+            transition: .2s;
+        }
+
+        .action-card:hover {
+            border-color: #2463eb;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(16,35,63,.06);
+        }
+
+        .action-card h3 {
+            color: #10233f;
+            margin-bottom: 10px;
+        }
+
+        .action-card p {
+            color: #68778b;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 17px;
+        }
+
+        .action-card span {
+            color: #2463eb;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .notice {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            color: #1e40af;
+            padding: 21px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .flash-message {
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 15px;
+            color: #8793a5;
+            font-size: 12px;
+            margin-top: 55px;
+        }
+
+        @media (max-width: 800px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .information-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 17px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .welcome {
+                padding: 27px 22px;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+            .stats-grid,
+            .information-grid,
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="{{ url_for('home') }}" class="logo">
+        Meet<span>Book</span>
+    </a>
+
+    <nav class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('providers.search_providers') }}">Explore Services</a>
+        <a href="{{ url_for('auth.logout') }}" class="logout">Logout</a>
+    </nav>
+
+</header>
+
+<main class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="welcome">
+
+        <small>MEETBOOK SOLUTIONS / PROVIDER PORTAL</small>
+
+        <h1>Welcome, {{ current_user.full_name }}</h1>
+
+        <p>
+            Manage your business, publish your services and connect
+            with customers through MeetBook Solutions.
+        </p>
+
+    </section>
+
+    <h2 class="section-title">Your Application Status</h2>
+
+    <section class="status-card">
+
+        <div>
+            <h3>Provider Account</h3>
+            <p>
+                Your approval status determines when you can publish
+                products and services on MeetBook.
+            </p>
+        </div>
+
+        <span class="status
+            {% if current_user.provider_status == 'Approved' %}approved
+            {% elif current_user.provider_status == 'Rejected' %}rejected
+            {% endif %}">
+            {{ current_user.provider_status }}
+        </span>
+
+    </section>
+
+    {% if current_user.provider_status == "Approved" %}
+
+        <h2 class="section-title">Business Overview</h2>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <span>TOTAL LISTINGS</span>
+                <strong>{{ listing_count }}</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>AVAILABLE LISTINGS</span>
+                <strong>{{ available_listing_count }}</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>TOTAL BOOKINGS</span>
+                <strong>{{ booking_count }}</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>PENDING BOOKINGS</span>
+                <strong>{{ pending_booking_count }}</strong>
+            </div>
+
+        </section>
+
+        <h2 class="section-title">Your Business Profile</h2>
+
+        {% if profile %}
+
+            <section class="profile-summary">
+
+                <h3>{{ profile.business_name }}</h3>
+
+                <p>
+                    <strong>Category:</strong>
+                    {{ profile.service_category }}
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    {{ profile.neighbourhood or "" }}
+                    {{ profile.city }}, {{ profile.state }}
+                </p>
+
+                <p>
+                    <strong>Experience:</strong>
+                    {{ profile.years_of_experience or 0 }} years
+                </p>
+
+                <p>
+                    <strong>About:</strong>
+                    {{ profile.description }}
+                </p>
+
+            </section>
+
+        {% else %}
+
+            <section class="notice">
+                <strong>Your business profile is not ready yet.</strong>
+                <p>
+                    Create your business profile to introduce your
+                    business and its location to customers.
+                </p>
+            </section>
+
+        {% endif %}
+
+        <h2 class="section-title">Manage Your Business</h2>
+
+        <section class="action-grid">
+
+            {% if profile %}
+
+                <a href="{{ url_for('providers.view_profile') }}"
+                   class="action-card">
+
+                    <h3>View Business Profile</h3>
+
+                    <p>
+                        View your professional business information
+                        on MeetBook.
+                    </p>
+
+                    <span>View Profile →</span>
+
+                </a>
+
+            {% else %}
+
+                <a href="{{ url_for('providers.create_profile') }}"
+                   class="action-card">
+
+                    <h3>Create Business Profile</h3>
+
+                    <p>
+                        Add your business name, category, description
+                        and business location.
+                    </p>
+
+                    <span>Create Profile →</span>
+
+                </a>
+
+            {% endif %}
+
+            <a href="{{ url_for('providers.manage_listings') }}"
+               class="action-card">
+
+                <h3>Products and Services</h3>
+
+                <p>
+                    Add the exact products and services you offer,
+                    including their prices and descriptions.
+                </p>
+
+                <span>Manage Listings →</span>
+
+            </a>
+
+            <a href="{{ url_for('bookings.provider_bookings') }}"
+               class="action-card">
+
+                <h3>Customer Bookings</h3>
+
+                <p>
+                    View customer booking requests, check their
+                    contact information and manage requested services.
+                </p>
+
+                <span>View Customer Bookings →</span>
+
+            </a>
+
+        </section>
+
+    {% else %}
+
+        <section class="notice">
+
+            <strong>Your next step</strong>
+
+            <p>
+                Your provider application is awaiting approval.
+                The MeetBook administration team must approve
+                your account before you can create your business
+                profile and publish your services.
+            </p>
+
+        </section>
+
+    {% endif %}
+
+    <h2 class="section-title">Account Information</h2>
+
+    <section class="information-grid">
+
+        <div class="info-card">
+            <span>FULL NAME</span>
+            <strong>{{ current_user.full_name }}</strong>
+        </div>
+
+        <div class="info-card">
+            <span>PHONE NUMBER</span>
+            <strong>{{ current_user.phone_number }}</strong>
+        </div>
+
+        <div class="info-card">
+            <span>EMAIL ADDRESS</span>
+            <strong>{{ current_user.email or "Not provided" }}</strong>
+        </div>
+
+        <div class="info-card">
+            <span>ACCOUNT TYPE</span>
+            <strong>Service Provider</strong>
+        </div>
+
+        <div class="info-card">
+            <span>IDENTITY VERIFICATION</span>
+            <strong>
+                {{ "Verified" if current_user.is_verified else "Not verified" }}
+            </strong>
+        </div>
+
+        <div class="info-card">
+            <span>ACCOUNT STATUS</span>
+            <strong>
+                {{ "Active" if current_user.is_active else "Inactive" }}
+            </strong>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    © 2026 MeetBook Solutions. Find. Book. Get It Done.
+</footer>
+
+</body>
+</html>

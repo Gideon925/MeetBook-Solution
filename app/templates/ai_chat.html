@@ -1,0 +1,793 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>MeetBook AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/ai.css') }}">
+</head>
+
+<body class="{% if embedded %}embedded-ai{% endif %}">
+
+<div class="ai-layout">
+
+    {% if not embedded %}
+    <aside class="sidebar">
+
+        <a href="/" class="brand">Meet<span>Book</span> AI</a>
+
+        <button type="button" class="new-chat" id="newChatButton">
+            + New chat
+        </button>
+
+        <div class="history-section">
+            <h3>Chat history</h3>
+
+            <div id="chatHistory" class="history-list">
+                <p class="history-empty">Loading conversations...</p>
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <p>{{ user.full_name }}</p>
+            <a href="{{ url_for('home') }}">Back to MeetBook</a>
+            <a href="{{ url_for('auth.logout') }}">Log out</a>
+        </div>
+
+    </aside>
+    {% endif %}
+
+    <main class="chat-area">
+
+        <header class="chat-header">
+            <h2>MeetBook AI</h2>
+            <span>Your intelligent assistant</span>
+        </header>
+
+        <section class="welcome" id="welcome">
+
+            <div class="ai-icon">AI</div>
+
+            <h1>Hello, {{ user.full_name }}.</h1>
+
+            <h2>What can I help you with today?</h2>
+
+            <p>
+                MeetBook AI is your intelligent assistant.
+                Ask questions, learn new things, write content,
+                solve problems and get help with everyday tasks.
+            </p>
+
+            <div class="suggestions">
+
+                <button type="button"
+                        data-prompt="Explain a difficult topic">
+                    Explain a difficult topic
+                </button>
+
+                <button type="button"
+                        data-prompt="Help me write a professional email">
+                    Help me write a professional email
+                </button>
+
+                <button type="button"
+                        data-prompt="Help me with programming">
+                    Help me with programming
+                </button>
+
+                <button type="button"
+                        data-prompt="Give me business ideas">
+                    Give me business ideas
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="messages"
+                 id="messages"
+                 aria-live="polite">
+        </section>
+
+        <div class="message-box">
+
+            <textarea
+                id="messageInput"
+                placeholder="Message MeetBook AI..."
+                rows="1"
+                aria-label="Your message"
+            ></textarea>
+
+            <button
+                id="recordButton"
+                type="button"
+                class="record-button"
+                title="Start voice recording"
+                aria-label="Start voice recording">
+
+                <span id="recordIcon">🎙</span>
+
+            </button>
+
+            <button id="sendButton" type="button">
+                Send
+            </button>
+
+        </div>
+
+        <p id="recordingStatus"
+           class="recording-status"
+           aria-live="polite">
+        </p>
+
+        <p class="disclaimer">
+            MeetBook AI can make mistakes. Verify important information.
+        </p>
+
+    </main>
+
+</div>
+
+<script>
+
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const messages = document.getElementById("messages");
+const welcome = document.getElementById("welcome");
+
+const chatHistory = document.getElementById("chatHistory");
+const newChatButton = document.getElementById("newChatButton");
+
+const recordButton = document.getElementById("recordButton");
+const recordIcon = document.getElementById("recordIcon");
+const recordingStatus = document.getElementById("recordingStatus");
+
+const csrfToken = document.querySelector(
+    'meta[name="csrf-token"]'
+).content;
+
+const chatUrl = "{{ url_for('ai.chat_api') }}";
+
+const conversationsUrl =
+    "{{ url_for('ai.get_conversations') }}";
+
+const conversationUrlBase =
+    "{{ url_for('ai.get_conversation', conversation_id=0) }}";
+
+let waitingForReply = false;
+let activeConversationId = null;
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+let recognition = null;
+let isRecording = false;
+
+
+// --------------------------------------------------
+// VOICE RECOGNITION
+// --------------------------------------------------
+
+if (SpeechRecognition) {
+
+    recognition = new SpeechRecognition();
+
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-NG";
+
+    recognition.onstart = function() {
+
+        isRecording = true;
+
+        recordButton.classList.add("recording");
+
+        recordIcon.textContent = "■";
+
+        recordButton.title = "Stop voice recording";
+
+        recordingStatus.textContent = "Listening... Speak now.";
+
+    };
+
+    recognition.onresult = function(event) {
+
+        let finalText = "";
+        let interimText = "";
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+
+            const transcript =
+                event.results[i][0].transcript;
+
+            if (event.results[i].isFinal) {
+                finalText += transcript;
+            } else {
+                interimText += transcript;
+            }
+
+        }
+
+        if (finalText) {
+
+            const separator =
+                messageInput.value.trim() ? " " : "";
+
+            messageInput.value +=
+                separator + finalText.trim();
+
+        }
+
+        recordingStatus.textContent = interimText
+            ? "Listening: " + interimText
+            : "Voice captured. You can continue speaking.";
+
+    };
+
+    recognition.onerror = function(event) {
+
+        recordingStatus.textContent =
+            event.error === "not-allowed"
+                ? "Microphone permission was denied."
+                : "Voice recognition error: " + event.error;
+
+        stopRecording();
+
+    };
+
+    recognition.onend = function() {
+
+        isRecording = false;
+
+        recordButton.classList.remove("recording");
+
+        recordIcon.textContent = "🎙";
+
+        recordButton.title = "Start voice recording";
+
+        recordButton.setAttribute(
+            "aria-label",
+            "Start voice recording"
+        );
+
+    };
+
+} else {
+
+    recordButton.disabled = true;
+
+    recordingStatus.textContent =
+        "Voice recognition is not supported by this browser.";
+
+}
+
+
+function stopRecording() {
+
+    if (recognition && isRecording) {
+        recognition.stop();
+    }
+
+    isRecording = false;
+
+    recordButton.classList.remove("recording");
+
+    recordIcon.textContent = "🎙";
+
+    recordButton.title = "Start voice recording";
+
+}
+
+
+recordButton.addEventListener("click", function() {
+
+    if (!recognition) {
+        recordingStatus.textContent =
+            "Your browser does not support voice recognition.";
+        return;
+    }
+
+    if (isRecording) {
+
+        stopRecording();
+
+        recordingStatus.textContent = "Recording stopped.";
+
+        return;
+
+    }
+
+    if (waitingForReply) {
+
+        recordingStatus.textContent =
+            "Please wait for MeetBook AI to finish responding.";
+
+        return;
+
+    }
+
+    try {
+
+        recognition.start();
+
+    } catch (error) {
+
+        recordingStatus.textContent =
+            "Could not start recording. Please try again.";
+
+    }
+
+});
+
+
+// --------------------------------------------------
+// MESSAGE DISPLAY
+// --------------------------------------------------
+
+function addMessage(text, sender) {
+
+    const message = document.createElement("div");
+
+    message.className = `chat-message ${sender}`;
+
+    const label = document.createElement("strong");
+
+    label.textContent =
+        sender === "user" ? "You" : "MeetBook AI";
+
+    const content = document.createElement("p");
+
+    content.textContent = text;
+
+    message.appendChild(label);
+
+    message.appendChild(content);
+
+    messages.appendChild(message);
+
+    messages.scrollTop = messages.scrollHeight;
+
+    return message;
+
+}
+
+
+function showWelcome() {
+
+    welcome.style.display = "block";
+
+    messages.innerHTML = "";
+
+}
+
+
+function showConversation() {
+
+    welcome.style.display = "none";
+
+}
+
+
+// --------------------------------------------------
+// LOAD CHAT HISTORY
+// --------------------------------------------------
+
+async function loadChatHistory() {
+
+    try {
+
+        const response = await fetch(conversationsUrl);
+
+        if (!response.ok) {
+            throw new Error("Could not load chat history.");
+        }
+
+        const data = await response.json();
+
+        chatHistory.innerHTML = "";
+
+        if (!data.conversations.length) {
+
+            chatHistory.innerHTML =
+                '<p class="history-empty">No conversations yet.</p>';
+
+            return;
+
+        }
+
+        data.conversations.forEach(conversation => {
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+
+            button.className = "history-item";
+
+            button.textContent = conversation.title;
+
+            button.title = conversation.title;
+
+            if (conversation.id === activeConversationId) {
+                button.classList.add("active");
+            }
+
+            button.addEventListener("click", function() {
+
+                loadConversation(conversation.id);
+
+            });
+
+            chatHistory.appendChild(button);
+
+        });
+
+    } catch (error) {
+
+        chatHistory.innerHTML =
+            '<p class="history-empty">Unable to load history.</p>';
+
+        console.error(error);
+
+    }
+
+}
+
+
+// --------------------------------------------------
+// LOAD EXISTING CONVERSATION
+// --------------------------------------------------
+
+async function loadConversation(conversationId) {
+
+    if (waitingForReply) {
+        return;
+    }
+
+    try {
+
+        const url = conversationUrlBase.replace(
+            /0$/,
+            String(conversationId)
+        );
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("Could not open this conversation.");
+        }
+
+        const data = await response.json();
+
+        activeConversationId = data.id;
+
+        messages.innerHTML = "";
+
+        showConversation();
+
+        data.messages.forEach(message => {
+
+            const sender =
+                message.role === "user"
+                    ? "user"
+                    : "assistant";
+
+            addMessage(message.content, sender);
+
+        });
+
+        await loadChatHistory();
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+}
+
+
+// --------------------------------------------------
+// NEW CHAT
+// --------------------------------------------------
+
+function startNewChat() {
+
+    if (waitingForReply) {
+        return;
+    }
+
+    activeConversationId = null;
+
+    messageInput.value = "";
+
+    showWelcome();
+
+    loadChatHistory();
+
+    messageInput.focus();
+
+}
+
+
+// --------------------------------------------------
+// SEND MESSAGE
+// --------------------------------------------------
+
+async function sendMessage() {
+
+    const message = messageInput.value.trim();
+
+    if (!message || waitingForReply) {
+        return;
+    }
+
+    if (isRecording) {
+        stopRecording();
+    }
+
+    waitingForReply = true;
+
+    sendButton.disabled = true;
+
+    sendButton.textContent = "Sending...";
+
+    messageInput.disabled = true;
+
+    if (newChatButton) {
+        newChatButton.disabled = true;
+    }
+
+    showConversation();
+
+    addMessage(message, "user");
+
+    messageInput.value = "";
+
+    const assistantMessage =
+        addMessage("", "assistant");
+
+    const assistantContent =
+        assistantMessage.querySelector("p");
+
+    try {
+
+        const response = await fetch(chatUrl, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
+            },
+
+            body: JSON.stringify({
+                message: message,
+                conversation_id: activeConversationId
+            })
+
+        });
+
+        if (!response.ok) {
+
+            const data = await response.json();
+
+            throw new Error(
+                data.error || "Something went wrong."
+            );
+
+        }
+
+        if (!response.body) {
+
+            throw new Error(
+                "Your browser does not support streaming."
+            );
+
+        }
+
+        const reader = response.body.getReader();
+
+        const decoder = new TextDecoder();
+
+        let buffer = "";
+
+        let receivedText = false;
+
+        let finished = false;
+
+        while (!finished) {
+
+            const result = await reader.read();
+
+            if (result.done) {
+                break;
+            }
+
+            buffer += decoder.decode(
+                result.value,
+                { stream: true }
+            );
+
+            const events = buffer.split(/\r?\n\r?\n/);
+
+            buffer = events.pop();
+
+            for (const event of events) {
+
+                const dataLine = event
+                    .split(/\r?\n/)
+                    .find(line => line.startsWith("data:"));
+
+                if (!dataLine) {
+                    continue;
+                }
+
+                const payload = dataLine.slice(5).trim();
+
+                if (payload === "[DONE]") {
+
+                    finished = true;
+
+                    break;
+
+                }
+
+                const data = JSON.parse(payload);
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                if (data.conversation_id) {
+
+                    activeConversationId =
+                        data.conversation_id;
+
+                }
+
+                if (data.text) {
+
+                    assistantContent.textContent += data.text;
+
+                    receivedText = true;
+
+                    messages.scrollTop =
+                        messages.scrollHeight;
+
+                }
+
+            }
+
+        }
+
+        if (!receivedText) {
+
+            assistantContent.textContent =
+                "I could not generate a response. Please try again.";
+
+        }
+
+        await loadChatHistory();
+
+    } catch (error) {
+
+        assistantMessage.remove();
+
+        addMessage(error.message, "error");
+
+    } finally {
+
+        waitingForReply = false;
+
+        sendButton.disabled = false;
+
+        sendButton.textContent = "Send";
+
+        messageInput.disabled = false;
+
+        if (newChatButton) {
+            newChatButton.disabled = false;
+        }
+
+        messageInput.focus();
+
+    }
+
+}
+
+
+// --------------------------------------------------
+// EVENT LISTENERS
+// --------------------------------------------------
+
+if (newChatButton) {
+
+    newChatButton.addEventListener(
+        "click",
+        startNewChat
+    );
+
+}
+
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+messageInput.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter" && !event.shiftKey) {
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+
+});
+
+
+document.querySelectorAll("[data-prompt]").forEach(button => {
+
+    button.addEventListener("click", function() {
+
+        messageInput.value = this.dataset.prompt;
+
+        messageInput.focus();
+
+    });
+
+});
+
+
+// --------------------------------------------------
+// INITIALIZE CHAT
+// --------------------------------------------------
+
+async function initializeChat() {
+
+    await loadChatHistory();
+
+    try {
+
+        const response = await fetch(conversationsUrl);
+
+        const data = await response.json();
+
+        if (data.conversations && data.conversations.length > 0) {
+
+            await loadConversation(
+                data.conversations[0].id
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Could not restore previous conversation:",
+            error
+        );
+
+    }
+
+}
+
+initializeChat();
+
+</script>
+
+</body>
+</html>

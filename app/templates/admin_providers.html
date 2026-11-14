@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Applications | MeetBook</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        h1 {
+            color: #173b67;
+        }
+
+        .application {
+            background: white;
+            padding: 22px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .status {
+            font-weight: bold;
+            color: #b7791f;
+        }
+
+        .approved {
+            color: #168044;
+        }
+
+        button {
+            background: #168044;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #173b67;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Provider Applications</h1>
+
+    {% for application in applications %}
+
+        <div class="application">
+
+            <h2>{{ application.full_name }}</h2>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ application.phone_number }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ application.email or "Not provided" }}
+            </p>
+
+            <p>
+                <strong>Application Status:</strong>
+
+                {% if application.provider_status == "Approved" %}
+                    <span class="approved">Approved</span>
+                {% else %}
+                    <span class="status">
+                        {{ application.provider_status }}
+                    </span>
+                {% endif %}
+            </p>
+
+            {% if application.provider_status == "Pending" %}
+
+                <form method="POST"
+                      action="{{ url_for('admin.approve_provider', user_id=application.id) }}">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token() }}">
+
+                    <button type="submit">
+                        Approve Provider
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        </div>
+
+    {% else %}
+
+        <p>No provider applications found.</p>
+
+    {% endfor %}
+
+    <a href="{{ url_for('admin.dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
+

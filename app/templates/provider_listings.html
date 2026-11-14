@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Products & Services | MeetBook Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            background: #f4f7fc;
+            color: #17243b;
+        }
+
+        .catalogue-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 30px;
+        }
+
+        .page-heading h1 {
+            color: #10233f;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #68778b;
+            line-height: 1.6;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: #2463eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .panel {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(16, 35, 63, .06);
+            margin-bottom: 30px;
+        }
+
+        .panel h2 {
+            color: #10233f;
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dce3ed;
+            border-radius: 9px;
+            font: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .primary-button {
+            border: none;
+            background: #2463eb;
+            color: white;
+            padding: 14px 23px;
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .primary-button:hover {
+            background: #174ec4;
+        }
+
+        .flash-message {
+            padding: 14px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+            background: #eaf2ff;
+            color: #17418d;
+        }
+
+        .listing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .listing-card {
+            background: white;
+            border: 1px solid #e8edf5;
+            border-radius: 15px;
+            padding: 23px;
+            box-shadow: 0 4px 18px rgba(16, 35, 63, .05);
+        }
+
+        .listing-card h3 {
+            color: #10233f;
+            font-size: 19px;
+            margin: 0 0 8px;
+        }
+
+        .listing-category {
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 17px;
+        }
+
+        .listing-price {
+            color: #2463eb;
+            font-size: 23px;
+            font-weight: 800;
+            margin: 12px 0;
+        }
+
+        .listing-description {
+            color: #59677a;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 12px 0;
+        }
+
+        .available {
+            background: #e7f8ed;
+            color: #18753a;
+        }
+
+        .unavailable {
+            background: #fff0ed;
+            color: #b43d2c;
+        }
+
+        .listing-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 17px;
+            padding-top: 17px;
+            border-top: 1px solid #edf0f5;
+        }
+
+        .action-button {
+            padding: 9px 13px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .edit-button {
+            background: #eaf1ff;
+            color: #2457bd;
+        }
+
+        .toggle-button {
+            background: #edf5ef;
+            color: #26723d;
+        }
+
+        .delete-button {
+            background: #fff0f0;
+            color: #b52d35;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 15px;
+            padding: 45px 20px;
+            text-align: center;
+            color: #68778b;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+
+            .page-heading h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">MeetBook Solutions</a>
+    <nav>
+        <a href="{{ url_for('auth.provider_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </nav>
+</header>
+
+<main class="catalogue-container">
+
+    <a class="back-link" href="{{ url_for('auth.provider_dashboard') }}">
+        ← Back to Dashboard
+    </a>
+
+    <div class="page-heading">
+        <h1>My Products & Services</h1>
+        <p>
+            Manage what your business offers. Add your products or services,
+            set your prices and control their availability.
+        </p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="panel">
+        <h2>Add a New Product or Service</h2>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label for="division">Choose a division</label>
+                    <select
+                        id="division"
+                        name="division"
+                        onchange="window.location.href='{{ url_for('providers.manage_listings') }}?division='+encodeURIComponent(this.value)"
+                    >
+                        {% for division in divisions %}
+                            <option value="{{ division }}"
+                                {% if division == selected_division %}selected{% endif %}>
+                                {{ division }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label for="catalogue_item_id">Select a product or service</label>
+                    <select id="catalogue_item_id" name="catalogue_item_id" required>
+                        <option value="">Choose an item</option>
+                        {% for item in catalogue_items %}
+                            <option value="{{ item.id }}">
+                                {{ item.category }} — {{ item.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Your price (₦)</label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="Enter your price"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="unit">Unit or portion</label>
+                    <input
+                        type="text"
+                        id="unit"
+                        name="unit"
+                        placeholder="Per plate, per hour, per pack..."
+                    >
+                </div>
+
+                <div class="form-group full">
+                    <label for="description">Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
+                        placeholder="Tell customers about this product or service..."
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <button type="submit" class="primary-button">
+                + Add to My Business
+            </button>
+        </form>
+    </section>
+
+    <section>
+        <h2>My Current Listings</h2>
+
+        {% if listings %}
+            <div class="listing-grid">
+
+                {% for listing in listings %}
+                    <article class="listing-card">
+
+                        <h3>{{ listing.catalogue_item.name }}</h3>
+
+                        <p class="listing-category">
+                            {{ listing.catalogue_item.division }}
+                            ·
+                            {{ listing.catalogue_item.category }}
+                        </p>
+
+                        <p class="listing-price">
+                            ₦{{ "{:,.2f}".format(listing.price|float) }}
+                        </p>
+
+                        {% if listing.unit %}
+                            <p>{{ listing.unit }}</p>
+                        {% endif %}
+
+                        {% if listing.description %}
+                            <p class="listing-description">
+                                {{ listing.description }}
+                            </p>
+                        {% else %}
+                            <p class="listing-description">
+                                No description added yet.
+                            </p>
+                        {% endif %}
+
+                        {% if listing.is_available %}
+                            <span class="availability available">Available</span>
+                        {% else %}
+                            <span class="availability unavailable">Unavailable</span>
+                        {% endif %}
+
+                        <div class="listing-actions">
+
+                            <a
+                                class="action-button edit-button"
+                                href="{{ url_for('providers.edit_listing', listing_id=listing.id) }}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('providers.toggle_listing_availability', listing_id=listing.id) }}"
+                            >
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="action-button toggle-button">
+                                    {{ "Mark Unavailable" if listing.is_available else "Mark Available" }}
+                                </button>
+                            </form>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('providers.delete_listing', listing_id=listing.id) }}"
+                                onsubmit="return confirm('Are you sure you want to delete this listing?');"
+                            >
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="action-button delete-button">
+                                    Delete
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </article>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>You have not added any listings yet.</h3>
+                <p>Start by adding the products or services your business offers.</p>
+            </div>
+        {% endif %}
+    </section>
+
+</main>
+
+</body>
+</html>

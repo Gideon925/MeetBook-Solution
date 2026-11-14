@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Business Profile | MeetBook Solutions">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px;
+            background: #f4f6fb;
+            font-family: Arial, sans-serif;
+            color: #222;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+        }
+
+        h1 {
+            color: #1769aa;
+            margin-bottom: 8px;
+        }
+
+        .intro {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 17px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d5dbe5;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 7px;
+            background: #1769aa;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #124f80;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 18px;
+            color: #1769aa;
+            text-decoration: none;
+        }
+
+        .message {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background: #fff0f0;
+            color: #9b1c1c;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                padding: 20px;
+                margin: 10px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Edit Business Profile</h1>
+    <p class="intro">
+        Update your business information on MeetBook Solutions.
+    </p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('providers.edit_profile') }}">
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label>Business Name *</label>
+        <input
+            type="text"
+            name="business_name"
+            value="{{ profile.business_name }}"
+            required
+        >
+
+        <label>Service Division *</label>
+        <select name="service_category" required>
+            {% for division in divisions %}
+                <option
+                    value="{{ division }}"
+                    {% if profile.service_category == division %}selected{% endif %}
+                >
+                    {{ division }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>Business Description *</label>
+        <textarea name="description" required>{{ profile.description }}</textarea>
+
+        <label>State *</label>
+        <input type="text" name="state" value="{{ profile.state }}" required>
+
+        <label>City *</label>
+        <input type="text" name="city" value="{{ profile.city }}" required>
+
+        <label>Local Government Area *</label>
+        <input type="text" name="lga" value="{{ profile.lga }}" required>
+
+        <label>Neighbourhood</label>
+        <input
+            type="text"
+            name="neighbourhood"
+            value="{{ profile.neighbourhood or '' }}"
+        >
+
+        <label>Business Address</label>
+        <textarea name="business_address">{{ profile.business_address or '' }}</textarea>
+
+        <label>Years of Experience</label>
+        <input
+            type="number"
+            name="years_of_experience"
+            min="0"
+            value="{{ profile.years_of_experience or 0 }}"
+        >
+
+        <label>Starting Price (₦)</label>
+        <input
+            type="number"
+            name="starting_price"
+            min="0"
+            step="0.01"
+            value="{{ profile.starting_price if profile.starting_price is not none else '' }}"
+        >
+
+        <button type="submit">Save Business Profile</button>
+
+    </form>
+
+    <a class="back" href="{{ url_for('providers.view_profile') }}">
+        Back to My Business Profile
+    </a>
+
+</div>
+
+</body>
+</html>

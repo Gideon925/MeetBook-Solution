@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Listing | MeetBook Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f4f7fc;
+            color: #17243b;
+        }
+
+        .edit-container {
+            max-width: 760px;
+            margin: 55px auto;
+            padding: 20px;
+        }
+
+        .edit-card {
+            background: #fff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(16, 35, 63, 0.08);
+        }
+
+        .edit-heading {
+            margin-bottom: 28px;
+        }
+
+        .edit-heading h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #10233f;
+        }
+
+        .edit-heading p {
+            color: #68778b;
+            line-height: 1.6;
+        }
+
+        .item-information {
+            background: #f0f5ff;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .item-information h3 {
+            margin: 0 0 8px;
+        }
+
+        .item-information p {
+            margin: 0;
+            color: #68778b;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dce3ed;
+            border-radius: 9px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2463eb;
+            box-shadow: 0 0 0 3px rgba(36, 99, 235, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .save-button,
+        .cancel-button {
+            padding: 13px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-button {
+            background: #2463eb;
+            color: white;
+        }
+
+        .save-button:hover {
+            background: #174ec4;
+        }
+
+        .cancel-button {
+            background: #edf1f7;
+            color: #34445d;
+        }
+
+        .flash-message {
+            padding: 13px;
+            margin-bottom: 18px;
+            border-radius: 9px;
+            background: #fff0f0;
+            color: #a12626;
+        }
+
+        @media (max-width: 600px) {
+            .edit-card {
+                padding: 22px;
+            }
+
+            .edit-heading h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">MeetBook Solutions</a>
+
+    <nav>
+        <a href="{{ url_for('auth.provider_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </nav>
+</header>
+
+<main class="edit-container">
+
+    <section class="edit-card">
+
+        <div class="edit-heading">
+            <h1>Edit Your Listing</h1>
+            <p>Update the price and details of the product or service you offer.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="item-information">
+            <h3>{{ listing.catalogue_item.name }}</h3>
+            <p>
+                {{ listing.catalogue_item.division }}
+                ·
+                {{ listing.catalogue_item.category }}
+            </p>
+        </div>
+
+        <form method="POST">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-group">
+                <label for="price">Your Price (₦)</label>
+                <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    min="0.01"
+                    step="0.01"
+                    value="{{ listing.price }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="unit">Unit or Portion</label>
+                <input
+                    type="text"
+                    id="unit"
+                    name="unit"
+                    value="{{ listing.unit or '' }}"
+                    placeholder="Example: per plate, per pack, per hour"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Describe what customers will receive..."
+                >{{ listing.description or '' }}</textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="save-button">
+                    Save Changes
+                </button>
+
+                <a
+                    href="{{ url_for('providers.manage_listings', division=listing.catalogue_item.division) }}"
+                    class="cancel-button"
+                >
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+</html>
+

@@ -1,0 +1,1239 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f9fc;
+    color: #202431;
+}
+
+.ai-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 270px;
+    flex-shrink: 0;
+    background: #101827;
+    color: white;
+    padding: 25px 18px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.brand {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.brand span {
+    color: #d6a84f;
+}
+
+.new-chat {
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    padding: 13px;
+    border: 1px solid #455064;
+    border-radius: 8px;
+    color: white;
+    background: transparent;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.new-chat:hover {
+    background: #263247;
+}
+
+.new-chat:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.history-section {
+    margin-top: 30px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.history-section h3 {
+    color: #aeb8c9;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.history-item {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 11px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #e0e5ed;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.history-item:hover,
+.history-item.active {
+    background: #263247;
+    color: white;
+}
+
+.history-empty {
+    color: #8994a7;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.sidebar-bottom {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid #344054;
+    display: grid;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.sidebar-bottom a {
+    color: #d6a84f;
+    text-decoration: none;
+}
+
+.chat-area {
+    flex: 1;
+    min-width: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+}
+
+.chat-header {
+    width: 100%;
+    border-bottom: 1px solid #e4e7ed;
+    padding-bottom: 20px;
+}
+
+.chat-header h2 {
+    font-size: 20px;
+}
+
+.chat-header span {
+    color: #777f8e;
+    font-size: 13px;
+}
+
+.welcome {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    text-align: center;
+    padding: 45px 0;
+}
+
+.ai-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 20px;
+    background: #101827;
+    color: #d6a84f;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto 25px;
+}
+
+.welcome h1 {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.welcome h2 {
+    font-size: 21px;
+    margin-bottom: 15px;
+}
+
+.welcome > p {
+    color: #747d8c;
+    line-height: 1.7;
+}
+
+.suggestions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.suggestions button {
+    cursor: pointer;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    text-align: left;
+}
+
+.suggestions button:hover {
+    background: #f0f4ff;
+}
+
+.messages {
+    flex: 1;
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.chat-message {
+    max-width: 85%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.chat-message strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.chat-message p {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background: #e8f0ff;
+    color: #172b4d;
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+    background: #f1f2f4;
+    color: #222;
+}
+
+.chat-message.error {
+    align-self: flex-start;
+    background: #fff0f0;
+    color: #a00000;
+}
+
+.message-box {
+    width: 100%;
+    max-width: 750px;
+    background: white;
+    border: 1px solid #dfe3eb;
+    border-radius: 14px;
+    padding: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.message-box textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: vertical;
+    min-height: 48px;
+    font: inherit;
+}
+
+.message-box button {
+    border: none;
+    background: #101827;
+    color: white;
+    border-radius: 8px;
+    padding: 0 22px;
+    cursor: pointer;
+}
+
+.message-box button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.disclaimer {
+    color: #8a909b;
+    font-size: 12px;
+    margin: 12px 0;
+}
+
+@media (max-width: 650px) {
+    .ai-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 15px;
+    }
+
+    .new-chat {
+        margin-top: 15px;
+    }
+
+    .history-section {
+        max-height: 150px;
+        margin-top: 18px;
+    }
+
+    .sidebar-bottom {
+        grid-template-columns: 1fr 1fr;
+        font-size: 12px;
+    }
+
+    .sidebar-bottom p {
+        grid-column: 1 / -1;
+    }
+
+    .chat-area {
+        min-height: 75vh;
+        padding: 15px;
+    }
+
+    .suggestions {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome h1 {
+        font-size: 24px;
+    }
+
+    .messages {
+        padding: 12px 0;
+    }
+
+    .chat-message {
+        max-width: 95%;
+    }
+}
+CSScat > app/templates/ai_chat.html <<'HTML'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>MeetBook AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/ai.css') }}">
+</head>
+<body>
+
+<div class="ai-layout">
+
+    <aside class="sidebar">
+        <a href="/" class="brand">Meet<span>Book</span> AI</a>
+
+        <button type="button" class="new-chat" id="newChatButton">
+            + New chat
+        </button>
+
+        <div class="history-section">
+            <h3>Chat history</h3>
+            <div id="chatHistory" class="history-list">
+                <p class="history-empty">Loading conversations...</p>
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <p>{{ user.full_name }}</p>
+            <a href="{{ url_for('home') }}">Back to MeetBook</a>
+            <a href="{{ url_for('auth.logout') }}">Log out</a>
+        </div>
+    </aside>
+
+    <main class="chat-area">
+
+        <header class="chat-header">
+            <h2>MeetBook AI</h2>
+            <span>General AI Assistant</span>
+        </header>
+
+        <section class="welcome" id="welcome">
+            <div class="ai-icon">AI</div>
+
+            <h1>Hello, {{ user.full_name }}.</h1>
+            <h2>What can I help you with today?</h2>
+
+            <p>
+                MeetBook AI is your intelligent assistant.
+                Ask questions, learn new things, write content,
+                solve problems and get help with everyday tasks.
+            </p>
+
+            <div class="suggestions">
+                <button type="button" data-prompt="Explain a difficult topic">
+                    Explain a difficult topic
+                </button>
+                <button type="button" data-prompt="Help me write a professional email">
+                    Help me write a professional email
+                </button>
+                <button type="button" data-prompt="Help me with programming">
+                    Help me with programming
+                </button>
+                <button type="button" data-prompt="Give me business ideas">
+                    Give me business ideas
+                </button>
+            </div>
+        </section>
+
+        <section class="messages" id="messages" aria-live="polite"></section>
+
+        <div class="message-box">
+            <textarea
+                id="messageInput"
+                placeholder="Message MeetBook AI..."
+                rows="1"
+                aria-label="Your message"
+            ></textarea>
+
+            <button id="sendButton" type="button">Send</button>
+        </div>
+
+        <p class="disclaimer">
+            MeetBook AI can make mistakes. Verify important information.
+        </p>
+
+    </main>
+
+</div>
+
+<script>
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const messages = document.getElementById("messages");
+const welcome = document.getElementById("welcome");
+const chatHistory = document.getElementById("chatHistory");
+const newChatButton = document.getElementById("newChatButton");
+
+const csrfToken = document.querySelector(
+    'meta[name="csrf-token"]'
+).content;
+
+const chatUrl = "{{ url_for('ai.chat_api') }}";
+const conversationsUrl = "{{ url_for('ai.get_conversations') }}";
+const conversationUrlBase = "{{ url_for('ai.get_conversation', conversation_id=0) }}";
+
+let waitingForReply = false;
+let activeConversationId = null;
+
+
+function addMessage(text, sender) {
+    const message = document.createElement("div");
+    message.className = `chat-message ${sender}`;
+
+    const label = document.createElement("strong");
+    label.textContent = sender === "user" ? "You" : "MeetBook AI";
+
+    const content = document.createElement("p");
+    content.textContent = text;
+
+    message.appendChild(label);
+    message.appendChild(content);
+
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
+
+    return message;
+}
+
+
+function showWelcome() {
+    welcome.style.display = "block";
+    messages.innerHTML = "";
+}
+
+
+function showConversation() {
+    welcome.style.display = "none";
+}
+
+
+async function loadChatHistory() {
+    try {
+        const response = await fetch(conversationsUrl);
+
+        if (!response.ok) {
+            throw new Error("Could not load chat history.");
+        }
+
+        const data = await response.json();
+
+        chatHistory.innerHTML = "";
+
+        if (!data.conversations.length) {
+            chatHistory.innerHTML =
+                '<p class="history-empty">No conversations yet.</p>';
+            return;
+        }
+
+        data.conversations.forEach(conversation => {
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.className = "history-item";
+            button.textContent = conversation.title;
+            button.title = conversation.title;
+
+            if (conversation.id === activeConversationId) {
+                button.classList.add("active");
+            }
+
+            button.addEventListener("click", function() {
+                loadConversation(conversation.id);
+            });
+
+            chatHistory.appendChild(button);
+        });
+
+    } catch (error) {
+        chatHistory.innerHTML =
+            '<p class="history-empty">Unable to load history.</p>';
+        console.error(error);
+    }
+}
+
+
+async function loadConversation(conversationId) {
+    if (waitingForReply) {
+        return;
+    }
+
+    try {
+        const url = conversationUrlBase.replace(
+            /0$/,
+            String(conversationId)
+        );
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("Could not open this conversation.");
+        }
+
+        const data = await response.json();
+
+        activeConversationId = data.id;
+
+        messages.innerHTML = "";
+        showConversation();
+
+        data.messages.forEach(message => {
+            const sender = message.role === "user" ? "user" : "assistant";
+            addMessage(message.content, sender);
+        });
+
+        await loadChatHistory();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+
+function startNewChat() {
+    if (waitingForReply) {
+        return;
+    }
+
+    activeConversationId = null;
+    messageInput.value = "";
+
+    showWelcome();
+    loadChatHistory();
+    messageInput.focus();
+}
+
+
+async function sendMessage() {
+    const message = messageInput.value.trim();
+
+    if (!message || waitingForReply) {
+        return;
+    }
+
+    waitingForReply = true;
+    sendButton.disabled = true;
+    sendButton.textContent = "Sending...";
+    messageInput.disabled = true;
+    newChatButton.disabled = true;
+
+    showConversation();
+
+    addMessage(message, "user");
+    messageInput.value = "";
+
+    const assistantMessage = addMessage("", "assistant");
+    const assistantContent = assistantMessage.querySelector("p");
+
+    try {
+        const response = await fetch(chatUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({
+                message: message,
+                conversation_id: activeConversationId
+            })
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || "Something went wrong.");
+        }
+
+        if (!response.body) {
+            throw new Error("Your browser does not support streaming.");
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        let buffer = "";
+        let receivedText = false;
+        let finished = false;
+
+        while (!finished) {
+            const result = await reader.read();
+
+            if (result.done) {
+                break;
+            }
+
+            buffer += decoder.decode(result.value, { stream: true });
+
+            const events = buffer.split(/\r?\n\r?\n/);
+            buffer = events.pop();
+
+            for (const event of events) {
+                const dataLine = event
+                    .split(/\r?\n/)
+                    .find(line => line.startsWith("data:"));
+
+                if (!dataLine) {
+                    continue;
+                }
+
+                const payload = dataLine.slice(5).trim();
+
+                if (payload === "[DONE]") {
+                    finished = true;
+                    break;
+                }
+
+                const data = JSON.parse(payload);
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                if (data.conversation_id) {
+                    activeConversationId = data.conversation_id;
+                }
+
+                if (data.text) {
+                    assistantContent.textContent += data.text;
+                    receivedText = true;
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+        }
+
+        if (!receivedText) {
+            assistantContent.textContent =
+                "I could not generate a response. Please try again.";
+        }
+
+        await loadChatHistory();
+
+    } catch (error) {
+        assistantMessage.remove();
+        addMessage(error.message, "error");
+
+    } finally {
+        waitingForReply = false;
+        sendButton.disabled = false;
+        sendButton.textContent = "Send";
+        messageInput.disabled = false;
+        newChatButton.disabled = false;
+        messageInput.focus();
+    }
+}
+
+
+newChatButton.addEventListener("click", startNewChat);
+
+sendButton.addEventListener("click", sendMessage);
+
+messageInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+});
+
+document.querySelectorAll("[data-prompt]").forEach(button => {
+    button.addEventListener("click", function() {
+        messageInput.value = this.dataset.prompt;
+        messageInput.focus();
+    });
+});
+
+
+async function initializeChat() {
+    await loadChatHistory();
+
+    try {
+        const response = await fetch(conversationsUrl);
+        const data = await response.json();
+
+        if (data.conversations && data.conversations.length > 0) {
+            await loadConversation(data.conversations[0].id);
+        }
+    } catch (error) {
+        console.error("Could not restore previous conversation:", error);
+    }
+}
+
+initializeChat();
+</script>
+
+</body>
+</html>
+HTML
+
+cat > app/static/css/ai.css <<'CSS'
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f9fc;
+    color: #202431;
+}
+
+.ai-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 270px;
+    flex-shrink: 0;
+    background: #101827;
+    color: white;
+    padding: 25px 18px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.brand {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.brand span {
+    color: #d6a84f;
+}
+
+.new-chat {
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    padding: 13px;
+    border: 1px solid #455064;
+    border-radius: 8px;
+    color: white;
+    background: transparent;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.new-chat:hover {
+    background: #263247;
+}
+
+.new-chat:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.history-section {
+    margin-top: 30px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.history-section h3 {
+    color: #aeb8c9;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.history-item {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 11px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #e0e5ed;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.history-item:hover,
+.history-item.active {
+    background: #263247;
+    color: white;
+}
+
+.history-empty {
+    color: #8994a7;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.sidebar-bottom {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid #344054;
+    display: grid;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.sidebar-bottom a {
+    color: #d6a84f;
+    text-decoration: none;
+}
+
+.chat-area {
+    flex: 1;
+    min-width: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+}
+
+.chat-header {
+    width: 100%;
+    border-bottom: 1px solid #e4e7ed;
+    padding-bottom: 20px;
+}
+
+.chat-header h2 {
+    font-size: 20px;
+}
+
+.chat-header span {
+    color: #777f8e;
+    font-size: 13px;
+}
+
+.welcome {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    text-align: center;
+    padding: 45px 0;
+}
+
+.ai-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 20px;
+    background: #101827;
+    color: #d6a84f;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto 25px;
+}
+
+.welcome h1 {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.welcome h2 {
+    font-size: 21px;
+    margin-bottom: 15px;
+}
+
+.welcome > p {
+    color: #747d8c;
+    line-height: 1.7;
+}
+
+.suggestions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.suggestions button {
+    cursor: pointer;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    text-align: left;
+}
+
+.suggestions button:hover {
+    background: #f0f4ff;
+}
+
+.messages {
+    flex: 1;
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.chat-message {
+    max-width: 85%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.chat-message strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.chat-message p {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background: #e8f0ff;
+    color: #172b4d;
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+    background: #f1f2f4;
+    color: #222;
+}
+
+.chat-message.error {
+    align-self: flex-start;
+    background: #fff0f0;
+    color: #a00000;
+}
+
+.message-box {
+    width: 100%;
+    max-width: 750px;
+    background: white;
+    border: 1px solid #dfe3eb;
+    border-radius: 14px;
+    padding: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.message-box textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: vertical;
+    min-height: 48px;
+    font: inherit;
+}
+
+.message-box button {
+    border: none;
+    background: #101827;
+    color: white;
+    border-radius: 8px;
+    padding: 0 22px;
+    cursor: pointer;
+}
+
+.message-box button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.disclaimer {
+    color: #8a909b;
+    font-size: 12px;
+    margin: 12px 0;
+}
+
+@media (max-width: 650px) {
+    .ai-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 15px;
+    }
+
+    .new-chat {
+        margin-top: 15px;
+    }
+
+    .history-section {
+        max-height: 150px;
+        margin-top: 18px;
+    }
+
+    .sidebar-bottom {
+        grid-template-columns: 1fr 1fr;
+        font-size: 12px;
+    }
+
+    .sidebar-bottom p {
+        grid-column: 1 / -1;
+    }
+
+    .chat-area {
+        min-height: 75vh;
+        padding: 15px;
+    }
+
+    .suggestions {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome h1 {
+        font-size: 24px;
+    }
+
+    .messages {
+        padding: 12px 0;
+    }
+
+    .chat-message {
+        max-width: 95%;
+    }
+}
+
+/* Voice recording */
+.record-button {
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    border: 1px solid #d1d5db;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #333333;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.record-button:hover {
+    background: #f0f4ff;
+    border-color: #6479d8;
+}
+
+.record-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.record-button.recording {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #ffffff;
+    animation: recordingPulse 1.2s infinite;
+}
+
+.recording-status {
+    min-height: 20px;
+    margin: 8px 12px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+@keyframes recordingPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    }
+}
+
+/* MEETBOOK AI FIXED LAYOUT */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.ai-layout {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.ai-sidebar {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-sidebar-header,
+.ai-sidebar-footer {
+    flex-shrink: 0;
+}
+
+.ai-chat-history {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.ai-main {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.ai-input-area {
+    flex-shrink: 0;
+}
+
+/* CORRECT MEETBOOK AI SCROLLING LAYOUT */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.brand,
+.new-chat,
+.sidebar-bottom {
+    flex-shrink: 0;
+}
+
+.history-section {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.history-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.chat-area {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.chat-header,
+.message-box {
+    flex-shrink: 0;
+}
+
+.messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}

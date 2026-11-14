@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users | MeetBook Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            background: #f4f6fb;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .admin-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,.06);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        input, select, button {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .search-form input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .search-button {
+            background: #1769aa;
+            color: white;
+            border: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #f4f6fb;
+        }
+
+        .status-active {
+            color: #16803c;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .action-button {
+            border: none;
+            color: white;
+            padding: 9px 12px;
+        }
+
+        .deactivate {
+            background: #c0392b;
+        }
+
+        .activate {
+            background: #16803c;
+        }
+
+        .message {
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        @media(max-width: 650px) {
+            th, td {
+                padding: 9px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="{{ url_for('admin.dashboard') }}" class="logo">
+        MeetBook Admin
+    </a>
+
+    <nav>
+        <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin.provider_applications') }}">Providers</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </nav>
+</header>
+
+<main class="admin-container">
+
+    <h1>User Management</h1>
+    <p>View, search, deactivate and reactivate MeetBook accounts.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="admin-card">
+
+        <h2>Registered Users</h2>
+
+        <form method="GET" action="{{ url_for('admin.manage_users') }}" class="search-form">
+
+            <input
+                type="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search by name, phone or email"
+            >
+
+            <select name="status">
+                <option value="all" {% if status == "all" %}selected{% endif %}>
+                    All accounts
+                </option>
+
+                <option value="active" {% if status == "active" %}selected{% endif %}>
+                    Active accounts
+                </option>
+
+                <option value="inactive" {% if status == "inactive" %}selected{% endif %}>
+                    Inactive accounts
+                </option>
+            </select>
+
+            <button class="search-button" type="submit">Search</button>
+        </form>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Account Type</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.full_name }}</td>
+                        <td>{{ user.phone_number }}</td>
+                        <td>{{ user.account_type|title }}</td>
+
+                        <td>
+                            {% if user.is_active %}
+                                <span class="status-active">Active</span>
+                            {% else %}
+                                <span class="status-inactive">Inactive</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if user.is_admin %}
+                                Administrator
+                            {% elif user.is_active %}
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('admin.deactivate_user', user_id=user.id) }}"
+                                    onsubmit="return confirm('Are you sure you want to deactivate this account?');"
+                                >
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="action-button deactivate" type="submit">
+                                        Deactivate
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('admin.activate_user', user_id=user.id) }}"
+                                    onsubmit="return confirm('Reactivate this account?');"
+                                >
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="action-button activate" type="submit">
+                                        Reactivate
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">No users found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

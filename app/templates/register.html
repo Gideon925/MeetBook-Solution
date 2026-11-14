@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | MeetBook Solutions</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 35px 18px;
+            background: #f4f7fc;
+            font-family: Arial, sans-serif;
+            color: #26354a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-layout {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 20px 65px rgba(16, 35, 63, .10);
+        }
+
+        .welcome-panel {
+            background: linear-gradient(145deg, #10233f, #2463eb);
+            padding: 55px 42px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .brand span {
+            color: #a9c2ff;
+        }
+
+        .welcome-content {
+            margin: 45px 0;
+        }
+
+        .welcome-content .eyebrow {
+            color: #b9ceff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .welcome-content h1 {
+            font-size: 39px;
+            line-height: 1.2;
+            margin: 20px 0;
+        }
+
+        .welcome-content p {
+            color: #d4def0;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .welcome-points {
+            margin-top: 30px;
+        }
+
+        .welcome-points p {
+            color: #e3eaff;
+            font-size: 13px;
+            margin: 17px 0;
+        }
+
+        .panel-footer {
+            color: #c4d2ed;
+            font-size: 12px;
+        }
+
+        .form-panel {
+            padding: 45px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-heading {
+            margin-bottom: 25px;
+        }
+
+        .form-heading .eyebrow {
+            color: #2463eb;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .form-heading h2 {
+            color: #10233f;
+            font-size: 29px;
+            margin: 10px 0;
+        }
+
+        .form-heading p {
+            color: #718096;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            background: #fff0f0;
+            color: #a00000;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #34445c;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fbfcff;
+            color: #26354a;
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2463eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(36, 99, 235, .09);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+        }
+
+        .optional {
+            color: #8995a7;
+            font-weight: 400;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            background: #2463eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .submit-btn:hover {
+            background: #174fc5;
+            transform: translateY(-1px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 23px;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .login-link a {
+            color: #2463eb;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #718096;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .home-link:hover,
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 750px) {
+            .register-layout {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+            }
+
+            .welcome-panel {
+                padding: 30px;
+            }
+
+            .welcome-content {
+                margin: 30px 0 15px;
+            }
+
+            .welcome-content h1 {
+                font-size: 29px;
+            }
+
+            .welcome-points {
+                display: none;
+            }
+
+            .panel-footer {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 35px 25px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-heading h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-layout">
+
+    <section class="welcome-panel">
+
+        <a href="{{ url_for('home') }}" class="brand">
+            Meet<span>Book</span>
+        </a>
+
+        <div class="welcome-content">
+
+            <span class="eyebrow">WELCOME TO MEETBOOK SOLUTIONS</span>
+
+            <h1>
+                Your services.
+                Your connections.
+                One platform.
+            </h1>
+
+            <p>
+                Discover service providers, connect with customers
+                and make everyday services easier through MeetBook.
+            </p>
+
+            <div class="welcome-points">
+                <p>01 &nbsp; Discover services around your location</p>
+                <p>02 &nbsp; Connect with customers and providers</p>
+                <p>03 &nbsp; Manage your bookings in one place</p>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+            Find. Book. Get It Done.
+        </div>
+
+    </section>
+
+
+    <section class="form-panel">
+
+        <div class="form-heading">
+
+            <span class="eyebrow">GET STARTED TODAY</span>
+
+            <h2>Create your account</h2>
+
+            <p>
+                Join MeetBook Solutions. Enter your details below
+                to get started.
+            </p>
+
+        </div>
+
+
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+
+
+        <form method="POST"
+              action="{{ url_for('auth.register') }}">
+
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+
+            <div class="form-group">
+
+                <label for="full_name">Full name</label>
+
+                <input
+                    type="text"
+                    id="full_name"
+                    name="full_name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="phone_number">Phone number</label>
+
+                    <input
+                        type="tel"
+                        id="phone_number"
+                        name="phone_number"
+                        placeholder="080..."
+                        autocomplete="tel"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email <span class="optional">(Optional)</span>
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="account_type">Account type</label>
+
+                <select id="account_type"
+                        name="account_type"
+                        required>
+
+                    <option value="">Choose your account type</option>
+
+                    <option value="customer">Customer</option>
+
+                    <option value="provider">Service Provider</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="password">Create password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Minimum 8 characters"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="confirm_password">Confirm password</label>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Repeat password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button type="submit" class="submit-btn">
+                Create My Account
+            </button>
+
+        </form>
+
+
+        <div class="login-link">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}">Sign in</a>
+        </div>
+
+        <a href="{{ url_for('home') }}" class="home-link">
+            Back to homepage
+        </a>
+
+    </section>
+
+</div>
+
+</body>
+</html>
